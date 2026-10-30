@@ -1,0 +1,513 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Tutor</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #081326;
+    color: #f1f5ff;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 6%;
+    background: #0c1b34;
+    border-bottom: 1px solid #243b62;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #7c5cff;
+}
+
+header p {
+    color: #9db6d9;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 25px;
+    padding: 25px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.sidebar {
+    background: #0d1d38;
+    padding: 20px;
+    border-radius: 16px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    margin-bottom: 18px;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #d7e4ff;
+    text-align: left;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sidebar button:hover {
+    background: #20385f;
+    border-color: #536fa6;
+}
+
+main {
+    min-width: 0;
+}
+
+.hero {
+    padding: 30px;
+    border-radius: 18px;
+    background: linear-gradient(120deg, #803dff, #087cf5);
+    margin-bottom: 22px;
+}
+
+.hero h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    line-height: 1.6;
+    color: #edf4ff;
+}
+
+.subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.subjects button {
+    background: #ffffff20;
+    border: 1px solid #ffffff50;
+    padding: 10px 15px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+}
+
+.card {
+    background: #0d1d38;
+    border: 1px solid #213b63;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.muted {
+    color: #9db6d9;
+    font-size: 14px;
+}
+
+.chat-box {
+    height: 350px;
+    overflow-y: auto;
+    padding: 15px;
+    background: #08152a;
+    border-radius: 12px;
+    margin: 18px 0;
+}
+
+.message {
+    padding: 13px 16px;
+    border-radius: 12px;
+    margin-bottom: 13px;
+    max-width: 85%;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.user {
+    background: #1768e8;
+    margin-left: auto;
+}
+
+.bot {
+    background: #1a3154;
+    border: 1px solid #294a78;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+}
+
+input, select, textarea {
+    background: #08152a;
+    border: 1px solid #35517b;
+    color: white;
+    padding: 14px;
+    border-radius: 10px;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #7c5cff;
+}
+
+#question {
+    flex: 1;
+    min-width: 0;
+}
+
+.primary {
+    border: none;
+    background: #7c5cff;
+    color: white;
+    padding: 13px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary:hover {
+    background: #6845eb;
+}
+
+.tools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.tool {
+    background: #172b4b;
+    border: 1px solid #294a78;
+    padding: 17px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    text-align: left;
+}
+
+.tool:hover {
+    background: #243e67;
+}
+
+.tool strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.result {
+    margin-top: 15px;
+    background: #08152a;
+    padding: 16px;
+    border-radius: 10px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+footer {
+    text-align: center;
+    color: #829abd;
+    padding: 25px;
+    font-size: 13px;
+}
+
+@media(max-width: 800px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .tools {
+        grid-template-columns: 1fr;
+    }
+
+    .input-area {
+        flex-wrap: wrap;
+    }
+
+    #question {
+        width: 100%;
+        flex-basis: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <div class="logo"><span>AI</span> Study Tutor 🤖</div>
+        <p>Learn • Practice • Grow</p>
+    </div>
+    <div>📚 Student Dashboard</div>
+</header>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h3>📖 Study Menu</h3>
+        <button onclick="focusChat()">🏠 Home</button>
+        <button onclick="focusChat()">💬 Chat with AI</button>
+        <button onclick="generateNotes()">📝 Study Notes</button>
+        <button onclick="createQuiz()">🎯 Quiz & Practice</button>
+        <button onclick="showPlan()">📅 Study Plan</button>
+    </aside>
+
+    <main>
+
+        <section class="hero">
+            <h1>Hi! I'm your AI Study Tutor 👋</h1>
+            <p>Ask questions, understand difficult topics, practice quizzes and learn new things!</p>
+
+            <div class="subjects">
+                <button onclick="setSubject('Science')">🔬 Science</button>
+                <button onclick="setSubject('Maths')">➗ Maths</button>
+                <button onclick="setSubject('English')">📘 English</button>
+                <button onclick="setSubject('Computer')">💻 Computer</button>
+                <button onclick="setSubject('General Knowledge')">🌍 GK</button>
+            </div>
+        </section>
+
+        <section class="card" id="chat-section">
+            <h2>💬 Chat with AI</h2>
+            <p class="muted">Ask any question related to your studies.</p>
+
+            <div class="chat-box" id="chatBox">
+                <div class="message bot">
+                    Hello student! 👋
+
+                    I'm your AI Study Tutor.
+
+                    Ask me a question like:
+                    • Explain photosynthesis
+                    • What is artificial intelligence?
+                    • Explain fractions in simple words
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input id="question" type="text"
+                       placeholder="Type your study question..."
+                       onkeydown="if(event.key==='Enter') askTutor()">
+
+                <button class="primary" onclick="askTutor()">Ask ➤</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>⚡ Quick Study Tools</h2>
+
+            <div class="tools">
+                <button class="tool" onclick="generateNotes()">
+                    <strong>📝 Generate Notes</strong>
+                    <span class="muted">Get short topic notes</span>
+                </button>
+
+                <button class="tool" onclick="createQuiz()">
+                    <strong>🏆 Create Quiz</strong>
+                    <span class="muted">Test your knowledge</span>
+                </button>
+
+                <button class="tool" onclick="showPlan()">
+                    <strong>📅 Study Plan</strong>
+                    <span class="muted">Plan your learning</span>
+                </button>
+            </div>
+
+            <div id="toolResult" class="result" style="display:none"></div>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    AI Study Tutor • Learn Smarter, Not Harder • Made for Students ❤️
+</footer>
+
+<script>
+let currentSubject = "General";
+
+function focusChat() {
+    document.getElementById("chat-section").scrollIntoView({
+        behavior: "smooth"
+    });
+    document.getElementById("question").focus();
+}
+
+function setSubject(subject) {
+    currentSubject = subject;
+
+    addMessage("bot",
+        "Great! Your selected subject is " + subject +
+        ". Ask me a question about " + subject + ".");
+    focusChat();
+}
+
+function addMessage(type, text) {
+    const chatBox = document.getElementById("chatBox");
+    const message = document.createElement("div");
+
+    message.className = "message " + type;
+    message.textContent = text;
+
+    chatBox.appendChild(message);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function askTutor() {
+    const input = document.getElementById("question");
+    const question = input.value.trim();
+
+    if (!question) return;
+
+    addMessage("user", question);
+    input.value = "";
+
+    // Demo tutor: provides basic topic explanations without an API.
+    const answer = getDemoAnswer(question);
+
+    setTimeout(() => {
+        addMessage("bot", answer);
+    }, 500);
+}
+
+function getDemoAnswer(question) {
+    const q = question.toLowerCase();
+
+    if (q.includes("photosynthesis")) {
+        return "🌱 Photosynthesis is the process by which green plants make their own food.\n\nPlants use sunlight, water, and carbon dioxide to make glucose and release oxygen.\n\nSimple formula:\nCarbon dioxide + Water + Sunlight → Glucose + Oxygen";
+    }
+
+    if (q.includes("fraction")) {
+        return "➗ A fraction represents a part of a whole.\n\nExample: 1/2 means one part out of two equal parts.\n\nIn 3/4:\n• 3 is the numerator\n• 4 is the denominator";
+    }
+
+    if (q.includes("artificial intelligence") || q === "what is ai") {
+        return "🤖 Artificial Intelligence (AI) is technology that enables computers to perform tasks that usually require human intelligence.\n\nExamples include chatbots, voice assistants, and image recognition systems.";
+    }
+
+    if (q.includes("computer")) {
+        return "💻 A computer is an electronic device that accepts data, processes it, and produces information.\n\nBasic parts include:\n1. Input devices\n2. CPU (processing)\n3. Memory\n4. Output devices";
+    }
+
+    if (q.includes("study plan") || q.includes("timetable")) {
+        return "📅 Sample daily study plan:\n\n4:00 PM – Maths\n4:45 PM – Science\n5:30 PM – Short break\n5:45 PM – English\n6:15 PM – Revise today's topics\n\nRemember to take breaks and get enough sleep!";
+    }
+
+    return "📚 Let's learn about: " + question + "\n\nHere's a simple way to study this topic:\n\n1. Start by understanding the main idea.\n2. Learn the important definitions.\n3. Write down one or two examples.\n4. Practice questions related to the topic.\n5. Revise what you learned.\n\nThis is a demo tutor with sample answers. To get real AI answers to any question, connect this website to an AI API using a secure backend.";
+}
+
+function generateNotes() {
+    showResult(
+        "📝 Study Notes\n\n" +
+        "Subject: " + currentSubject + "\n\n" +
+        "• Read the topic carefully.\n" +
+        "• Write important definitions.\n" +
+        "• Note down key points.\n" +
+        "• Add examples.\n" +
+        "• Revise regularly.\n\n" +
+        "Tip: Keep your notes short and easy to understand."
+    );
+}
+
+function createQuiz() {
+    showResult(
+        "🎯 Practice Quiz\n\n" +
+        "Question 1: Which planet is known as the Red Planet?\n\n" +
+        "A) Earth\n" +
+        "B) Mars\n" +
+        "C) Jupiter\n\n" +
+        "Click an answer:"
+    );
+
+    const result = document.getElementById("toolResult");
+
+    const buttons = document.createElement("div");
+    buttons.style.marginTop = "12px";
+
+    ["A) Earth", "B) Mars", "C) Jupiter"].forEach(answer => {
+        const button = document.createElement("button");
+        button.className = "primary";
+        button.style.margin = "5px";
+        button.textContent = answer;
+
+        button.onclick = () => {
+            if (answer === "B) Mars") {
+                showResult("✅ Correct! Mars is known as the Red Planet.");
+            } else {
+                showResult("❌ Not quite. Try again! Hint: Mars is the fourth planet from the Sun.");
+            }
+        };
+
+        buttons.appendChild(button);
+    });
+
+    result.appendChild(buttons);
+}
+
+function showPlan() {
+    showResult(
+        "📅 Your Sample Study Plan\n\n" +
+        "Monday – Maths and Science\n" +
+        "Tuesday – English and Computer\n" +
+        "Wednesday – Maths practice\n" +
+        "Thursday – Science revision\n" +
+        "Friday – English writing\n" +
+        "Saturday – Quiz and practice\n" +
+        "Sunday – Revise and relax\n\n" +
+        "Adjust this plan according to your school schedule."
+    );
+}
+
+function showResult(text) {
+    const result = document.getElementById("toolResult");
+    result.style.display = "block";
+    result.textContent = text;
+}
+</script>
+
+</body>
+</html>
